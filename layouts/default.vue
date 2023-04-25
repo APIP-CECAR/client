@@ -19,31 +19,49 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>
+              {{item.title}}
+            </v-list-item-title>            
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
+    <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />                  
-      <v-toolbar-title v-text="title" />
-      <v-spacer />      
+      <v-toolbar-title>{{ title  }}</v-toolbar-title>
+      <v-spacer />
+      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
+    <v-navigation-drawer
+        v-model="rightDrawer"
+        :right="right"
+        temporary
+        fixed
+      >
+        <v-list>
+          <v-list-item @click.native="right = !right">
+            <v-list-item-action>
+              <v-icon light>
+                mdi-repeat
+              </v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
     
     <v-footer
       :absolute="!fixed"
       app
     >
-      <span>PIP &copy; {{ new Date().getFullYear() }}</span>
+      <span>APIP &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -53,6 +71,7 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
+      rightDrawer: false,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -68,9 +87,34 @@ export default {
           to: '/admin'
         },
         {
+          icon: 'mdi-comment-edit-outline',
+          title: 'Editor de historias',
+          to: '/history_editor'
+        },
+        {
+          icon: 'mdi-application-cog-outline',
+          title: 'Propiedades de la historia',
+          to: '/historyProperties'
+        },
+        {
+          icon: 'mdi-clipboard-text-clock',
+          title: 'Historia',
+          to: '/history'
+        },        
+        {
+          icon: 'mdi-book-open-page-variant-outline',
+          title: 'Escenas',
+          to: '/scene'
+        },
+        {
           icon: 'mdi-wrench-outline',
           title: 'Gestion de ambientes',
           to: '/management'
+        },
+        {
+          icon: 'mdi-clipboard-text-outline',
+          title: 'Generacion de plan',
+          to: '/planner'
         }
       ],
       miniVariant: false,

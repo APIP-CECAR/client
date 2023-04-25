@@ -27,17 +27,17 @@
     <v-tabs-items v-model="tabs">
       <v-tab-item>
         <v-card flat>
-            <SGH />
+            <!--SGH /-->
         </v-card>
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-            <Students />
+            <!--Students /-->
         </v-card>
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-            <Agent />
+            <!--Agent /-->
         </v-card>
       </v-tab-item>
     </v-tabs-items>

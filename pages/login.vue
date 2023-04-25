@@ -1,7 +1,7 @@
 <template>
   <v-container>    
     <v-card-title> Login </v-card-title>
-    <UserAuthForm buttonText="Login"/>
+    <!--UserAuthForm buttonText="Login"/-->
   </v-container>    
 </template>
 <script>

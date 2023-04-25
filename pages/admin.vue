@@ -2,10 +2,10 @@
   <v-app>    
     <v-row>
       <v-col cols="12">
-        <LoadTest />
+        <!--LoadTest /-->
       </v-col>
       <v-col>
-        <ListTests />        
+        <!--ListTests /-->
       </v-col>
     </v-row>
   </v-app>
