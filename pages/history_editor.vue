@@ -10,8 +10,8 @@
                                 <v-list-item-content>
                                     <v-list-item-title>{{history.name}}</v-list-item-title>
                                 </v-list-item-content>
-                                <v-list-item-action>
-                                    <v-btn icon :to="'/historyProperties'"> <!--@click="showPropertiesHistory(history)"-->
+                                <v-list-item-action class="d-inline-block">
+                                    <v-btn icon :to="`/historyProperties/${history._id}`">
                                         <v-icon color="#FB8C00">mdi-file-document-edit-outline</v-icon>
                                     </v-btn>                                    
                                     <v-btn icon @click="deleteHistory(history._id)">
@@ -58,39 +58,11 @@ export default {
             rules: [
                 value => !!value || 'Required.',
                 value => (value && value.length >= 3) || 'Min 3 characters',
-            ],
-            // histories: [],
+            ],            
             historyActive: {},
             historyScheme:{
                 competence: "PC",
-                name: "",
-                introduction: [
-                    {
-                        _id:"",
-                        title: "",
-                        background: "",
-                        hiper_objects: [{}]
-                    }
-                ],
-                scenes: [
-                    {
-                        _id:"",
-                        tittle: "",
-                        background: "",
-                        hiper_objects: [{}],
-                        level: "",
-                        competence: "",
-                        skill: "",
-                        minigame: [
-                            {
-                                name: "",
-                                path: "",
-                                description: "",
-                                score: ""
-                            }
-                        ]
-                    }
-                ]
+                name: "",                
             }            
         }
     }, 
@@ -105,7 +77,7 @@ export default {
         ...mapActions('history', ['createHistory', 'deleteHistory']),
         async addNewHistory() {
             this.historyScheme.name = this.nameHistory;
-            
+                        
             this.createHistory(this.historyScheme)
                 .then(response => {
                     const newHistory = response                    

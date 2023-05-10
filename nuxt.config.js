@@ -1,4 +1,5 @@
 import colors from "vuetify/es5/util/colors";
+require("dotenv").config();
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -6,7 +7,7 @@ export default {
     titleTemplate: "%s - app_cecar",
     title: "app_cecar",
     htmlAttrs: {
-      lang: "en",
+      lang: "es",
     },
     meta: [
       { charset: "utf-8" },
@@ -20,13 +21,19 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
+  env: {
+    CECAR_API: process.env.CECAR_API,
+  },
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ["~/plugins/axios"],
+  // , { src: "~/plugins/vuex-persist", ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
@@ -36,11 +43,22 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
+    "@nuxtjs/dotenv",
   ],
 
   axios: {
     // proxy: true,
     baseURL: process.env.CECAR_API || "http://localhost:5000",
+  },
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: "historyProperties:id",
+        path: "/historyProperties/:id",
+        component: resolve(__dirname, "pages/historyProperties.vue"),
+      });
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

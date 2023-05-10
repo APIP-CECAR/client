@@ -1,6 +1,7 @@
 // store/history.js
 export const state = () => ({
   histories: [],
+  history: {},
 });
 
 export const mutations = {
@@ -22,6 +23,15 @@ export const mutations = {
 };
 
 export const actions = {
+  async loadHistory({ commit }, id) {
+    try {
+      const response = await this.$axios.get(`/history/${id}`);
+      const history = response.data;
+      commit("updateHistory", id, history);
+    } catch (error) {
+      console.error(error);
+    }
+  },
   async loadHistories({ commit }) {
     try {
       const response = await this.$axios.get("/history");
@@ -67,6 +77,53 @@ export const actions = {
     try {
       await this.$axios.delete(`/history/${historyId}`);
       commit("deleteHistory", historyId);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  addIntroduction({ commit }, { historyId, introduction }) {
+    try {
+      this.$axios
+        .put(`/history/${historyId}/introduction`, {
+          introduction,
+        })
+        .then((response) => {
+          console.log(`addIntroduction on store ${response}`);
+          this.$axios.get(`/history/${historyId}`).then((history) => {
+            const updatedHistory = history.data;
+            commit("updateHistory", { historyId, updatedHistory });
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  updateIntroduction({ commit }, { introductionId, introduction, historyId }) {
+    try {
+      this.$axios
+        .put(`/introduction/${introductionId}`, {
+          introduction,
+        })
+        .then((response) => {
+          this.$axios.get(`/history/${historyId}`).then((history) => {
+            const updatedHistory = history.data;
+            commit("updateHistory", { historyId, updatedHistory });
+          });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  deleteIntroduction({ commit }, { historyId, introductionId }) {
+    try {
+      this.$axios
+        .delete(`/history/${historyId}/introduction/${introductionId}`)
+        .then((response) => {
+          this.$axios.get(`/history/${historyId}`).then((history) => {
+            const updatedHistory = history.data;
+            commit("updateHistory", { historyId, updatedHistory });
+          });
+        });
     } catch (error) {
       console.error(error);
     }
