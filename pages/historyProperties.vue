@@ -17,7 +17,7 @@
                     <v-card>
                         <v-img :src="`http://localhost:5000${slide.background}`"   height="300px">
                             <span class="text-h5 white--text pl-4 pt-4 d-inline-block">{{ slide.title }}</span>
-                            <v-card-title>Elementos: {{ slide.hiper_objects }}</v-card-title>
+                            <v-card-title></v-card-title>
                         </v-img>
 
                         <v-card-actions class="white justify-center">
@@ -30,47 +30,59 @@
                         </v-card-actions>
                     </v-card>
                 </v-col>
-                <v-spacer></v-spacer>
-                    <v-col cols="12" sm="6" md="4">
-                        <v-img
-                            class="mb-2"
-                            contain
-                            lazy-src="https://picsum.photos/id/11/10/6"
-                            max-height="300"
-                            max-width="500"
-                            :src="newIntro.background ? `http://localhost:5000${newIntro.background}`: `/upload_image.png`" 
-                        ></v-img><!--`${ process.env.CECAR_API }${ newIntro.background }` : `/upload_image.png`-->
-                        <v-text-field
-                            class="mb-2"
-                            label="Texto introductorio"
-                            placeholder="Texto introductorio"
-                            outlined
-                            counter="100"
-                            v-model="newIntro.title"
-                            :rules="textRules"                        
-                        ></v-text-field>
-                        <label for="file">Selecciona una imágen:</label>                    
-                        <v-file-input
-                            class="mb-2"
-                            :disabled="(newIntro.title == '') ? true : false"
-                            :rules="imgRules"
-                            accept="image/png, image/jpeg"
-                            placeholder="Selecciona una imagen"
-                            prepend-icon="mdi-camera"
-                            label="Imagen de fondo"
-                            outlined
-                            dense
-                            @change="uploadFile($event)"
-                        ></v-file-input>
-                        <v-btn 
-                            color="blue-grey" 
-                            class="ma-2 white--text" 
-                            @click="addIntroduction"
-                            :disabled="(newIntro.title == '') ? true : false"
-                        > 
-                            Agregar introduccion
-                            <v-icon right dark> mdi-plus </v-icon>
-                        </v-btn>
+                <!--v-spacer></v-spacer-->                
+            </v-row>
+            <v-row>
+                <v-col cols="12" sm="12" md="12">
+                        <v-card elevation="2" class="mx-auto my-12">
+                            <v-container fluid>
+                                <v-row>
+                                    <v-col>
+                                        <v-img
+                                            class="mb-2"
+                                            contain
+                                            lazy-src="https://picsum.photos/id/11/10/6"
+                                            max-height="200"
+                                            max-width="400"
+                                            :src="newIntro.background ? `http://localhost:5000${newIntro.background}` : `/upload_image.png`" 
+                                        ></v-img><!--`${ process.env.CECAR_API }${ newIntro.background }` : `/upload_image.png`-->
+                                    </v-col>
+                                    <v-col>
+                                        <v-text-field
+                                            class="mb-2"
+                                            label="Texto introductorio"
+                                            placeholder="Texto introductorio"
+                                            outlined
+                                            counter="100"
+                                            v-model="newIntro.title"
+                                            :rules="textRules"                        
+                                        ></v-text-field>
+                                        <label for="file">Selecciona una imágen:</label>                    
+                                        <v-file-input
+                                            class="mb-2"
+                                            :disabled="(newIntro.title == '') ? true : false"
+                                            :rules="imgRules"
+                                            accept="image/png, image/jpeg"
+                                            placeholder="Selecciona una imagen"
+                                            prepend-icon="mdi-camera"
+                                            label="Imagen de fondo"
+                                            outlined
+                                            dense
+                                            @change="uploadFile($event)"
+                                        ></v-file-input>
+                                        <v-btn 
+                                            color="blue-grey" 
+                                            class="ma-2 white--text" 
+                                            @click="addIntroduction"
+                                            :disabled="(newIntro.title == '') ? true : false"
+                                        > 
+                                            Agregar introduccion
+                                            <v-icon right dark> mdi-plus </v-icon>
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
                     </v-col>
             </v-row>
         </v-container>
@@ -78,11 +90,11 @@
             <v-subheader class="font-weight-black">Escenas</v-subheader>
             <v-row>
                 <v-spacer></v-spacer>
-                <!--v-col v-for="(scene, n) in history.scenes" :key="n" cols="12" sm="6" md="4">
+                <v-col v-for="(scene, n) in history.scenes" :key="n" cols="12" sm="6" md="4">
                     <v-card>
                         <v-img :src="`https://picsum.photos/200/300?image=${getImage()}`" height="300px">                                
                             <span class="text-h5 white--text pl-4 pt-4 d-inline-block">{{ scene.title }}</span>
-                            <v-card-title>Elementos: {{ scene.hiper_objects.length }}</v-card-title>
+                            <v-card-title></v-card-title>
                         </v-img>
 
                         <v-card-actions class="white justify-center">                                
@@ -97,7 +109,7 @@
                             </v-btn>
                         </v-card-actions>
                     </v-card>
-                </v-col-->
+                </v-col>
             </v-row>
         </v-container>
         <template>
@@ -246,8 +258,8 @@ export default {
             },
         ],
         textRules: [
-            v => v !== null && (!!v || 'El texto es requerido'),
-            v => (v === null || v.length <= 50) || 'El texto no debe exceder los 50 caracteres'
+            // v => v !== null && (!!v || 'El texto es requerido'),
+            // v => (v === null || v.length <= 50) || 'El texto no debe exceder los 50 caracteres'
         ],
         newIntro: {
             title: '',
