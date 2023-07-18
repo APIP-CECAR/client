@@ -10,7 +10,7 @@
                       <v-col cols="12">
                         <v-text-field :rules="[rules.required, rules.counter]" v-model="name" label="Etiqueta del archivo"></v-text-field>
                         <Upload-test @file-selected="onGetDataJSON"></upload-test>
-                        <v-btn @click="saveTestReport" :disabled="!testReport">Guardar test</v-btn>
+                        <v-btn :loading="loading" @click="saveTestReport" :disabled="!testReport">Guardar test</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -46,24 +46,26 @@ export default {
           required: value => !!value || 'Este campo es requerido.',
           counter: value => value.length <= 20 || 'Max 20 characters',          
         },  
-        students:[]
+        students: [],
+        loading: false
       }
     },
-    methods: {
-      /*generatePlan() {         
-        axios.post(`${process.env.CECAR_API}/generate_plan`);
-      },*/
+    methods: {      
       onGetDataJSON(file) {        
         this.testReport = { file, name: this.name }
       },
-      saveTestReport(data) {         
+      saveTestReport() {        
+        this.loading = true; 
         axios.post(`${process.env.CECAR_API}/consumeData`, this.testReport)
-          .then( (response) =>{   
-          this.students = response.data.usersIds;
-        })
-        .catch( (error) =>{
-          console.log(error);
-        });
+          .then((response) => {
+            // se debe actualizar el state students
+            this.loading = false;
+            this.name = '';
+            this.students = response.data.usersIds;
+          })
+          .catch( (error) =>{
+            console.log(error);
+          });
       },      
   }    
 }

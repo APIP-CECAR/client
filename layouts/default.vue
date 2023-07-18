@@ -82,6 +82,11 @@ export default {
           to: '/'
         },
         {
+          icon: 'mdi-car-shift-pattern',
+          title: 'Ruta de aprendizaje',
+          to:'/learning_path'
+        },
+        {
           icon: 'mdi-shield-crown-outline',
           title: 'Administración',
           to: '/admin'
