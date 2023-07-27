@@ -1,11 +1,8 @@
 <template>
     <v-card flat tile>
         <v-toolbar color="#FF6F00" dark>            
-
             <v-toolbar-title>Edición de la Historia: {{ history.name }}</v-toolbar-title>
-
             <v-spacer></v-spacer>
-
             <v-btn icon>
                 <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -86,10 +83,10 @@
                     </v-col>
             </v-row>
         </v-container>
-        <v-container class="grey lighten-4" fluid>
+        <!--v-container class="grey lighten-4" fluid>
             <v-subheader class="font-weight-black">Escenas</v-subheader>
             <v-row>
-                <v-spacer></v-spacer>
+                <v-spacer></v-spacer>-{{ history }}-
                 <v-col v-for="(scene, n) in history.scenes" :key="n" cols="12" sm="6" md="4">
                     <v-card>
                         <v-img :src="`https://picsum.photos/200/300?image=${getImage()}`" height="300px">                                
@@ -110,62 +107,9 @@
                         </v-card-actions>
                     </v-card>
                 </v-col>
-            </v-row>
-        </v-container>
-        <template>
-            <v-row justify="center">
-                <v-dialog v-model="dialogIntro" persistent max-width="600px">                    
-                <v-card>
-                    <v-card-title>
-                        <span class="text-h5">Edición de introducción</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-text-field 
-                                        label="Título" 
-                                        required 
-                                        v-model="introductionActual.title"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-img :src="`http://localhost:5000${introductionActual.background}`"   height="300px">
-                                        <span class="text-h5 white--text pl-4 pt-4 d-inline-block">{{ introductionActual.title }}</span>
-                                        <v-card-title>Elementos: {{ introductionActual.hiper_objects }}</v-card-title>
-                                    </v-img>
-                                    <v-label><a href="`http://localhost:5000${introductionActual.background}`">
-                                        {{ introductionActual.background }}</a>
-                                    </v-label>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-file-input
-                                        :rules="imgRules"
-                                        accept="image/png, image/jpeg"
-                                        placeholder="Selecciona una imagen"
-                                        prepend-icon="mdi-camera"
-                                        label="Imagen de fondo"
-                                        outlined
-                                        dense
-                                        @change="uploadFile($event)"
-                                    ></v-file-input>
-                                </v-col>
-                            </v-row>
-                        </v-container>                        
-                    </v-card-text>
-                    <v-card-actions>
-                    <v-spacer></v-spacer>{{ introductionActual }}
-                    <v-btn color="blue darken-1" text @click="dialogIntro = false">
-                        Cancelar
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="updateIntroduction">
-                        Actualizar
-                    </v-btn>
-                    </v-card-actions>
-                </v-card>
-                </v-dialog>
-            </v-row>
-        </template>
+            </v-row>            
+        </v-container-->
+        <!--dialogs-->
         <template>
             <v-row justify="center">
                 <v-dialog v-model="dialogScene" persistent max-width="600px">                    
@@ -241,6 +185,9 @@
                 </v-dialog>
             </v-row>
         </template>
+        <!--end dialogs-->
+        <UploadScenes @onSaveNewScene="sceneIsSaved"/>   
+        {{ history }}     
     </v-card>
 </template>
 <script>
@@ -276,6 +223,12 @@ export default {
         },
     },
     methods: {        
+        getImage() {
+            const min = 550
+            const max = 560
+
+            return Math.floor(Math.random() * (max - min + 1)) + min
+        },
         async uploadFile(file) {
             // validate empty file
             if (!file) return;
@@ -341,7 +294,24 @@ export default {
             }).catch((error) => {
                 throw error;
             });            
-        }, // CRUD Scene        
+        }, // CRUD Scene
+        sceneIsSaved: function (idStorie) {
+
+            let historyTemp = { ...this.history }
+            let scenes = [...historyTemp.scenes]
+            scenes.push(idStorie)
+            historyTemp.scenes = scenes
+
+            this.$store.dispatch('history/updateHistory', {
+                historyId: this.$route.params.id,
+                updatedHistory: historyTemp
+            }).then((response) => {
+                console.log(response)
+                this.$store.dispatch('history/loadHistory', this.$route.params.id);
+            }).catch((error) => {
+                throw error;
+            });
+        }
     },
 };
 </script>

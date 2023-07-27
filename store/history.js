@@ -67,6 +67,7 @@ export const actions = {
   },
   async updateHistory({ commit }, { historyId, updatedHistory }) {
     try {
+      console.log("Updating history", historyId, updatedHistory);
       await this.$axios.put(`/history/${historyId}`, updatedHistory);
       commit("updateHistory", { historyId, updatedHistory });
     } catch (error) {

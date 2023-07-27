@@ -30,16 +30,15 @@ export default {
             axios.get(`${process.env.CECAR_API}/planner/students`)
                 .then((response) => {                                         
                     let { students, plans } = response.data;
-                    this.students = students;
-                    // console.log(this.students, plans);
+                    this.students = students;                    
                     this.students.forEach(student => {
                         student.plansLengt = student.plans.length;
 
                         student.plans.forEach(plan => {                    
-                            student.history = plan.history.name
+                            student.history = plan.history.name;
+                            student.historyId = plan.history._id;
                         });
-                        let field = `student_${student._id}`
-                        //console.log(field,typeof plans, plans[field])
+                        let field = `student_${student._id}`                        
                         student.path = plans[field];                        
                     });   
                     console.log(students)                 
@@ -49,7 +48,7 @@ export default {
             })
         },    
     },
-    async created() {        
+    async beforeMount() {        
         await this.getAllStudents();        
     }
 }

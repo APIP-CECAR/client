@@ -53,11 +53,18 @@ export default {
 
   router: {
     extendRoutes(routes, resolve) {
-      routes.push({
-        name: "historyProperties:id",
-        path: "/historyProperties/:id",
-        component: resolve(__dirname, "pages/historyProperties.vue"),
-      });
+      routes.push(
+        {
+          name: "historyProperties:id",
+          path: "/historyProperties/:id",
+          component: resolve(__dirname, "pages/historyProperties.vue"),
+        },
+        {
+          name: "studentHistory",
+          path: "/render/student/:studentId/history/:historyId",
+          component: resolve(__dirname, "pages/renderHistory.vue"),
+        }
+      );
     },
   },
 
