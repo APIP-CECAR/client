@@ -43,6 +43,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
+    "@nuxtjs/auth-next",
+    "@nuxtjs/axios",
     "@nuxtjs/dotenv",
   ],
 
@@ -52,6 +54,7 @@ export default {
   },
 
   router: {
+    middleware: ["auth"],
     extendRoutes(routes, resolve) {
       routes.push(
         {
@@ -65,6 +68,19 @@ export default {
           component: resolve(__dirname, "pages/renderHistory.vue"),
         }
       );
+    },
+  },
+
+  // Configuración del módulo @nuxt/auth
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: "/auth/login", method: "post", propertyName: "token" },
+          logout: { url: "/auth/logout", method: "post", redirect: "/login" },
+          user: { url: "/auth/user", method: "get", propertyName: "user" },
+        },
+      },
     },
   },
 
@@ -88,5 +104,11 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ["defu"],
+  },
+
+  compilerOptions: {
+    types: ["@nuxtjs/auth-next"],
+  },
 };

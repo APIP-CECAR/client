@@ -11,15 +11,18 @@
 					<div class="wrapper">
 						<h5p
 							key="es"
-							:src="`${server}${ho}`" 
+							:src="`${server}/uploads${ho}`" 
 							:l10n="translations" 
-							@xapi="handleXAPIEvent" 														
+							@xapi="handleXAPIEvent"							
+							:copy="true"
+							:copyright="true"							
 						>
 							Cargando...
 							<template #error>
 								Recurso no disponible. Consulte con su proveedor de servicio.
 							</template>
-						</h5p>					
+						</h5p>
+
 					</div>
 				</v-card-text>
 
@@ -36,6 +39,8 @@
 </template>
 <script>
 import h5p from 'vue-h5p'
+// https://www.npmjs.com/package/vue-h5p
+// https://github.com/technowledgy/vue-h5p
 import translations from '~/utils/translations'
 
 export default {
@@ -61,7 +66,9 @@ export default {
 	},	
 	data() {
 		return {
-			dialog: false,			
+			dialog: false,
+			actor: { name: this.studentId }
+
 		}
 	},
 	methods: {
@@ -79,10 +86,12 @@ export default {
 						competence,
 						skill
 					})
-					.then(response => console.log(response))
+					.then(response => { 
+						// actualizar el storage
+					})
 					.catch(error => console.log(error)						
 				)}
-			console.log('H5P emitió evento X-API', ev)			
+			// console.log('H5P emitió evento X-API', ev)			
 		}		
 	},
 	computed: {

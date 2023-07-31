@@ -32,7 +32,7 @@
                 this.$emit('updateProperties', this.tempProperties);                
             },
             onSelected(){
-                console.log('onSelected');
+                // console.log('onSelected');
             }
         },
         mounted(){            

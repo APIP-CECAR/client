@@ -26,7 +26,7 @@
                 this.$emit('updatePropertie', propertie, index);
             },
             onSelected(){
-                console.log('onSelected');
+                // console.log('onSelected');
             }
         },
         mounted(){

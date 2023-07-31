@@ -67,7 +67,7 @@ export const actions = {
   },
   async updateHistory({ commit }, { historyId, updatedHistory }) {
     try {
-      console.log("Updating history", historyId, updatedHistory);
+      // console.log("Updating history", historyId, updatedHistory);
       await this.$axios.put(`/history/${historyId}`, updatedHistory);
       commit("updateHistory", { historyId, updatedHistory });
     } catch (error) {
@@ -89,7 +89,7 @@ export const actions = {
           introduction,
         })
         .then((response) => {
-          console.log(`addIntroduction on store ${response}`);
+          // console.log(`addIntroduction on store ${response}`);
           this.$axios.get(`/history/${historyId}`).then((history) => {
             const updatedHistory = history.data;
             commit("updateHistory", { historyId, updatedHistory });

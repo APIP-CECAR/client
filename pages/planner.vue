@@ -9,7 +9,7 @@
                     <v-row>
                       <v-col cols="12">
                         <v-text-field :rules="[rules.required, rules.counter]" v-model="name" label="Etiqueta del archivo"></v-text-field>
-                        <Upload-test @file-selected="onGetDataJSON"></upload-test>
+                        <UploadTest @file-selected="onGetDataJSON"></UploadTest>
                         <v-btn :loading="loading" @click="saveTestReport" :disabled="!testReport">Guardar test</v-btn>
                       </v-col>
                     </v-row>
@@ -33,10 +33,10 @@
 </template>
 <script>
 import Plannifier from '../components/Plannifier.vue';
-import Upload_test from '../components/Upload_test.vue';
+import UploadTest from '../components/Upload_test.vue';
 var axios = require('axios');
 export default {
-  components: { Upload_test, Plannifier },
+  components: { UploadTest, Plannifier },
     data() {
       return {
         handleFileSelected: {},

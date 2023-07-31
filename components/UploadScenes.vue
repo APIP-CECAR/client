@@ -250,8 +250,7 @@ export default {
                 // Object.assign(this.scenes[this.editedIndex], this.editedItem);
             } else {
 
-                this.$axios.post('/scenes', this.editedItem ).then(response => {
-                    console.log('add scenes',response);
+                this.$axios.post('/scenes', this.editedItem ).then(response => {                    
                     this.$emit('onSaveNewScene', response.data._id);
                     this.scenes.push(response.data);
                     // emit function onSaveNewScene and set id scene                    
@@ -272,11 +271,9 @@ export default {
 
                 try {
                     const response = await this.$axios.post('/upload', formData);
-                    const { fileName, fileSize, fileType, message } = response.data;
-                    // console.log(`fileName ${fileName} fileSize ${fileSize} fileType ${fileType} message ${message}`);
+                    const { fileName, fileSize, fileType, message } = response.data;                   
                     this.resources.push(this.name_resource)
-                    this.name_resource = '';
-                    console.log(fileName, fileSize, fileType, message)
+                    this.name_resource = '';                    
                     if (fileType == 'application/octet-stream') {
                         this.editedItem.hiper_objects.push(`/uploads/${fileName}`);
                         this.namesFiles.push(fileName);
@@ -288,7 +285,7 @@ export default {
                     console.error(error);
                 }
             } else if (this.selectedInputType === 'URL') {
-                console.log('URL:', this.url);
+                // console.log('URL:', this.url);
             }
         },        
         updateURL(url) {

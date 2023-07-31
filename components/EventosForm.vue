@@ -133,8 +133,7 @@
                 name: this.name,
                 date_event: this.date_event
             })
-            .then(response => {
-                console.log(response)
+            .then(response => {                
                 this.$emit('addEvents', true);
                 this.dialog = false
             })
