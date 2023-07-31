@@ -83,33 +83,7 @@
                     </v-col>
             </v-row>
         </v-container>
-        <!--v-container class="grey lighten-4" fluid>
-            <v-subheader class="font-weight-black">Escenas</v-subheader>
-            <v-row>
-                <v-spacer></v-spacer>-{{ history }}-
-                <v-col v-for="(scene, n) in history.scenes" :key="n" cols="12" sm="6" md="4">
-                    <v-card>
-                        <v-img :src="`https://picsum.photos/200/300?image=${getImage()}`" height="300px">                                
-                            <span class="text-h5 white--text pl-4 pt-4 d-inline-block">{{ scene.title }}</span>
-                            <v-card-title></v-card-title>
-                        </v-img>
-
-                        <v-card-actions class="white justify-center">                                
-                            <v-btn color="#F57C00" fab icon small @click="showPropertiesScene(scene)">
-                                <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-                            <v-btn color="#F4511E" fab icon small>
-                                <v-icon>mdi-trash-can</v-icon>
-                            </v-btn>
-                            <v-btn color="#F4511E" fab icon small @click="addScene">
-                                <v-icon>mdi-plus</v-icon>
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>            
-        </v-container-->
-        <!--dialogs-->
+        
         <template>
             <v-row justify="center">
                 <v-dialog v-model="dialogScene" persistent max-width="600px">                    
@@ -184,10 +158,8 @@
                 </v-card>
                 </v-dialog>
             </v-row>
-        </template>
-        <!--end dialogs-->
-        <UploadScenes @onSaveNewScene="sceneIsSaved"/>   
-        {{ history }}     
+        </template>        
+        <UploadScenes @onSaveNewScene="sceneIsSaved"/>           
     </v-card>
 </template>
 <script>

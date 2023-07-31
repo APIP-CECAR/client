@@ -103,9 +103,7 @@ export default {
             let ids = this.selected.map((obj) => obj.id_usuario)
             let history = this.history;
             axios.post(`${process.env.CECAR_API}/generate_plan`, { ids, history })
-                .then((response) => {
-                    console.log(response)
-                })
+                .then((response) => {})
                 .catch(function (error) {
                     console.log(error);
                 })            

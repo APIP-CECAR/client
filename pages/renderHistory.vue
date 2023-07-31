@@ -131,12 +131,12 @@ export default {
         },
         // Función para verificar si el botón del skill debe estar deshabilitado o no
         isSkillDisabled(item) {
-            console.log('isSkillDisabled', item)
+            // console.log('isSkillDisabled', item)
             return !this.isSkillEnabled(item);
         },
         // Función para obtener el skill formateado (sin guiones)
         getFormattedSkill(skill) {
-            console.log('getFormattedSkill', skill)
+            // console.log('getFormattedSkill', skill)
             return skill.replace(/-/g, '');
         },        
     },

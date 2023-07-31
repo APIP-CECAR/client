@@ -68,26 +68,19 @@
                 this.$refs.form_login.validate();
                 try{
                     // peticion de login
-                    const response = this.$auth.loginWith('local', 
-                    { data: userInfo})
-                    .then((response) => {                        
-                        const token = response.data.split(" ");
-                        const decoded = jwt.decode(token[1]);
-                        this.$router.push({ path: '/' })
-                        // !hacer pruebas para deeterminar si es necesaria la linea de abajo
-                        this.$auth.setUser(decoded);
-                        // !Esta linea se debe utilizar para refrescar el token. Se debe ubicar en default.vue
-                        // await this.$auth.setUserToken(response.data.access_token, response.data.refresh_token)                        
-                        this.logeading = false;
-                    }).catch((error) => {
-                        console.log(error)
-                        this.snackbarText = 'Usuario o contraseña incorrectos'
-                        this.snackbarColor = 'error'
-                        this.snackbar = true
-                        this.logeading = false;
-                    })
-
-                    
+                    const response = this.$auth.loginWith('local', { data: userInfo})
+                        .then((response) => {                                                    
+                            this.$router.push({ path: '/' })
+                            // !Esta linea se debe utilizar para refrescar el token. Se debe ubicar en default.vue
+                            // await this.$auth.setUserToken(response.data.access_token, response.data.refresh_token)
+                            this.logeading = false;
+                        }).catch((error) => {
+                            console.log(error)
+                            this.snackbarText = 'Usuario o contraseña incorrectos'
+                            this.snackbarColor = 'error'
+                            this.snackbar = true
+                            this.logeading = false;
+                        })                    
                 } catch(e) {
                     // console.log(e.message)
                     this.snackbarText = "Error de usuario o contraseña"
