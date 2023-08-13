@@ -15,7 +15,10 @@
                     transition="fade-transition"                    
                 >                
                     <!-- Contenido del carrusel -->
-                    <v-sheet v-if="item.title!=''" style="background-color: rgba(0, 0, 0, 0.7);" class="position-absolute bottom-0 left-0 right-0 p-2">
+                    <v-sheet 
+                        v-if="item.title!=''" 
+                        style="background-color: rgba(0, 0, 0, 0.7);" 
+                        class="position-absolute bottom-0 left-0 right-0 p-2">
                         <div class="text-h6 text-left pl-2">{{ item.title }}</div>
                     </v-sheet>
                 </v-carousel-item>
@@ -37,7 +40,16 @@
                             <v-card-text class="white text--primary">
                             <v-row>
                                 <v-col>
-                                    <v-img :src="`${server}${item.background}`" aspect-ratio="1.7" contain></v-img>                                    
+                                    <!--Iframe :src="getIframeSrc(item.background)" :width="300" :height="400" /-->
+                                    <!--v-img :src="`${server}${item.background}`" aspect-ratio="1.7" contain></v-img-->
+                                    <Iframe 
+                                        :src="getIframeSrc(item.background)" 
+                                        :width="iframeWidth" 
+                                        :height="iframeHeight"
+                                        :style="{ 'padding-top': `${iframeAspectRatio}%` }"
+                                    >
+                                    </Iframe>
+                                    <!--button @click="openYouTubeVideo">Abrir YouTube</button-->
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -66,7 +78,8 @@
                                                                         </v-icon>
                                                                     </v-btn>
                                                                     
-                                                                    <RenderH5P                                                 
+                                                                    <RenderH5P 
+                                                                        class="mx-0 align-center align-end"
                                                                         :server="server" 
                                                                         :studentId="studentId"
                                                                         :competence="item.competence"
@@ -91,43 +104,38 @@
     </v-card>
 </template>
 <script>
-export default {    
-    name: 'studentHistory',    
+import { mapState, mapActions } from 'vuex';
+
+export default {
+    name: 'studentHistory',
     data() {
         return {
-            slide:'',
+            slide: '',
             student: {},
-            plans: {},
-            history: {},
+            plans: {},            
             status: {},
             studentId: this.$route.params.studentId,
             historyId: this.$route.params.historyId,
             server: process.env.CECAR_API,
+            iframeWidth: 600, // Ancho del iframe
+            iframeHeight: 0, // Altura se calculará según el aspect ratio
+            iframeAspectRatio: 1.7, // Aspect ratio deseado (ejemplo: 1.7)
+            urlYoutube:''
         };
     },
-    methods: {        
-        getStudentHistory() {             
-            this.$axios.get(`/planner/student/${this.studentId}`).then((response) => {                                                         
-                this.plans = response.data.plans;
-                this.student = response.data.student;                
-                this.$axios.get(`/history/${this.historyId}`)
-                    .then((response) => {
-                        this.history = response.data;
-                        this.$axios.get(`/students/${this.studentId}/status/`)
-                            .then((response) => {
-                                this.status = response.data                                
-                            })                                        
-                    })            
-            })
-        },
+    computed: {
+        ...mapState('history', ['history']),
+    },
+    methods: {
+        ...mapActions('history', ['loadHistory']),
         // Función para verificar si el skill está habilitado o no
-        isSkillEnabled(item) {            
-            let competence = this.status[item.competence]            
+        isSkillEnabled(item) {
+            let competence = this.status[item.competence]
             let skill = this.getFormattedSkill(item.skill)
-            
+
             if (competence) {
                 return competence[skill]
-            }                    
+            }
         },
         // Función para verificar si el botón del skill debe estar deshabilitado o no
         isSkillDisabled(item) {
@@ -138,10 +146,52 @@ export default {
         getFormattedSkill(skill) {
             // console.log('getFormattedSkill', skill)
             return skill.replace(/-/g, '');
-        },        
+        },
+        
+        getIframeSrc(background) {
+            if (background.startsWith("/")) {
+                // Si la ruta comienza con "/", es interna, agrega el prefijo del servidor
+                return `${this.server}${background}`;
+            } else {
+                // Si no comienza con "/", verifica si es una URL de YouTube
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=([^&]+)/;
+                if (youtubeRegex.test(background)) {
+                    this.urlYoutube = background; 
+                    return "https://www.youtube.com/embed/" + background.match(youtubeRegex)[3];
+                } else {
+                    this.urlYoutube = null; 
+                    return background;
+                }
+            }
+        },
+        openYouTubeVideo() {
+            if (this.urlYoutube) {
+                window.open(this.urlYoutube, '_blank');
+            }
+        }
     },
     async beforeMount() {
-        await this.getStudentHistory();        
+        // ... Mantén el resto del código creado aquí ...
+        try {            
+            await this.loadHistory(this.historyId);
+            this.loading = false;
+        } catch (error) {
+            console.error(error);
+            this.loading = false;
+        }
+    },    
+    watch: {
+        // Actualiza la altura del iframe cuando cambia el aspect ratio o el ancho
+        iframeAspectRatio(newAspectRatio) {
+            this.iframeHeight = this.iframeWidth / newAspectRatio;
+        },
+        iframeWidth(newWidth) {
+            this.iframeHeight = newWidth / this.iframeAspectRatio;
+        }
+    },
+    mounted() {
+        // Calcula la altura inicial del iframe
+        this.iframeHeight = this.iframeWidth / this.iframeAspectRatio;
     }
-}
+};
 </script>

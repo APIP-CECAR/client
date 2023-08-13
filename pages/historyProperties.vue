@@ -2,17 +2,17 @@
     <v-card flat tile>
         <v-toolbar color="#FF6F00" dark>            
             <v-toolbar-title>Edición de la Historia: {{ history.name }}</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <!--v-spacer></v-spacer>
             <v-btn icon>
                 <v-icon>mdi-close</v-icon>
-            </v-btn>
+            </v-btn-->
         </v-toolbar>        
         <v-container class="grey lighten-4" fluid>
             <v-subheader class="font-weight-black">Introducción</v-subheader>
             <v-row>
                 <v-col v-for="(slide, n) in history.introductions" :key="n" cols="12" sm="6" md="4">                    
                     <v-card>
-                        <v-img :src="`http://localhost:5000${slide.background}`"   height="300px">
+                        <v-img :src="`${server}${slide.background}`"   height="300px">
                             <span class="text-h5 white--text pl-4 pt-4 d-inline-block">{{ slide.title }}</span>
                             <v-card-title></v-card-title>
                         </v-img>
@@ -41,8 +41,8 @@
                                             lazy-src="https://picsum.photos/id/11/10/6"
                                             max-height="200"
                                             max-width="400"
-                                            :src="newIntro.background ? `http://localhost:5000${newIntro.background}` : `/upload_image.png`" 
-                                        ></v-img><!--`${ process.env.CECAR_API }${ newIntro.background }` : `/upload_image.png`-->
+                                            :src="newIntro.background ? `${server}${newIntro.background}` : `/upload_image.png`" 
+                                        ></v-img>
                                     </v-col>
                                     <v-col>
                                         <v-text-field
@@ -186,6 +186,7 @@ export default {
         },
         introductionActual: {},
         escenaActual: {},
+        server: process.env.CECAR_API,
     }),
     computed: {
         history() {            
@@ -212,9 +213,9 @@ export default {
                 this.$axios.post('/upload', formData).then((response) => {                          
                     let { fileName, fileSize, fileType, message } = response.data;
                     console.log(`fileName ${fileName} fileSize ${fileSize} fileType ${fileType} message ${message}`);
-                    this.newIntro.background = `/uploads/${fileName}`; 
-                    this.introductionActual.background = `/uploads/${fileName}`;
-                    this.previewImage = `/uploads/${fileName}`; 
+                    this.newIntro.background = `/multimedia/${fileName}`; 
+                    this.introductionActual.background = `/multimedia/${fileName}`;
+                    this.previewImage = `/multimedia/${fileName}`; 
                 }).catch((error) => {
                     throw error;
                 });

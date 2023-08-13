@@ -1,10 +1,19 @@
 <template>        
     <v-row justify="center">
         <v-col cols="12" sm="8" md="8">
-            <v-card class="mx-auto d-flex pa-0 mb-5">
+            <v-card class="mx-auto pa-0 mb-5">
+                 <v-toolbar>
+                    <v-toolbar-title>Historias</v-toolbar-title>                        
+                    <v-progress-linear
+                        :active="loading"
+                        :indeterminate="loading"
+                        absolute
+                        bottom
+                        color="deep-purple accent-4"
+                    ></v-progress-linear>
+                </v-toolbar>  
                 <v-container fluid>
                     <v-list flat>
-                        <v-subheader>HISTORIAS</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="primary">
                             <v-list-item v-for="(history, i) in histories" :key="i">
                                 <v-list-item-content>
@@ -51,7 +60,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
     name: 'history_editor',
     data() {
-        return {
+        return {            
+            loading: false,
             selectedItem: -1,
             nameHistory: '',
             dialogProperties: false,
@@ -67,7 +77,7 @@ export default {
         }
     }, 
     computed: {
-        ...mapState("history", ["histories"]),
+        ...mapState("history", ["histories"]),        
     },
     created() {
         // Cargar las historias al inicio del componente
@@ -76,14 +86,17 @@ export default {
     methods: {        
         ...mapActions('history', ['createHistory', 'deleteHistory']),
         async addNewHistory() {
+            this.loading = true;
             this.historyScheme.name = this.nameHistory;
                         
             this.createHistory(this.historyScheme)
                 .then(response => {
+                    this.loading = false;
                     const newHistory = response                    
                     this.nameHistory = '' // Limpiar el campo de texto después de agregar la historia
                 })
                 .catch(error => {
+                    this.loading = false;
                     console.error(error)
                 })            
         },

@@ -4,6 +4,6 @@ export default ({ store }) => {
   new VuexPersistence({
     key: "cecar_APIP",
     storage: window.localStorage,
-    modules: ["auth", "store"],
+    modules: ["auth", "store", "history", "histories"],
   }).plugin(store);
 };

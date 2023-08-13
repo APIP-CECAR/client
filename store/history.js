@@ -8,6 +8,12 @@ export const mutations = {
   setHistories(state, histories) {
     state.histories = histories;
   },
+  setHistory(state, history) {
+    state.history = history;
+  },
+  /*setHistories(state, histories) {
+    state.histories = histories;
+  },*/
   addHistory(state, history) {
     state.histories.push(history);
   },
@@ -27,6 +33,25 @@ export const actions = {
     try {
       const response = await this.$axios.get(`/history/${id}`);
       const history = response.data;
+      commit("setHistory", history);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async loadHistories({ commit }) {
+    try {
+      const response = await this.$axios.get("/history");
+      const histories = response.data;
+      commit("setHistories", histories);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  /*
+  async loadHistory({ commit }, id) {
+    try {
+      const response = await this.$axios.get(`/history/${id}`);
+      const history = response.data;
       commit("updateHistory", id, history);
     } catch (error) {
       console.error(error);
@@ -41,6 +66,7 @@ export const actions = {
       console.error(error);
     }
   },
+  */
   async fetchHistories({ commit }) {
     try {
       const response = await this.$axios.get("/history");

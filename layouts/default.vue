@@ -91,7 +91,7 @@ export default {
           icon: 'mdi-apps',
           title: 'Inicio',
           to: '/',
-          roles:['consumer', 'admin']
+          roles:['consumer', 'admin', 'tester']
         },
         {
           icon: 'mdi-car-shift-pattern',
@@ -119,7 +119,7 @@ export default {
           icon: 'mdi-clipboard-text-clock',
           title: 'Historia',
           to: '/history'
-        },*/        
+        },*/
         /*{
           icon: 'mdi-book-open-page-variant-outline',
           title: 'Escenas',
@@ -129,11 +129,17 @@ export default {
           icon: 'mdi-wrench-outline',
           title: 'Gestion de ambientes',
           to: '/management'
-        },*/
+        },*/        
         {
           icon: 'mdi-clipboard-text-outline',
           title: 'Generacion de plan',
           to: '/planner',
+          roles: ['admin']
+        },
+        {
+          icon: 'mdi-account-multiple',
+          title: 'Gestion de usuarios',
+          to: '/users',
           roles: ['admin']
         },
         // logout
@@ -141,7 +147,7 @@ export default {
           icon: 'mdi-logout',
           title: 'Cerrar sesión',
           to: '/logout',
-          roles: ['consumer', 'admin']
+          roles: ['consumer', 'admin', 'tester']
         }
       ],
       miniVariant: false,

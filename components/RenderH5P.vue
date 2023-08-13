@@ -2,27 +2,24 @@
 	<div class="text-center">
 		<v-dialog v-model="dialog" max-width="auto" scrollable >
 			<template v-slot:activator="{ on, attrs }">
-				<v-btn plain color="indigo" outlined v-bind="attrs" v-on="on" class="mx-0 align-self-end">Actividades</v-btn>			
+				<v-btn color="indigo" v-bind="attrs" v-on="on">Actividades</v-btn>			
 			</template>
 
 			<v-card>
-				<v-card-title class="text-h5 grey lighten-2"> Actividad H5P </v-card-title>				
+				<v-card-title class="text-h5 grey lighten-2"> Actividad H5P</v-card-title>				
 				<v-card-text>				
-					<div class="wrapper">
+					<div class="wrapper">						
 						<h5p
 							key="es"
-							:src="`${server}/uploads${ho}`" 
-							:l10n="translations" 
-							@xapi="handleXAPIEvent"							
-							:copy="true"
-							:copyright="true"							
+							:src="`${server}${ho}`"
+							:l10n="translations"
+							@xapi="handleXAPIEvent"
 						>
 							Cargando...
 							<template #error>
 								Recurso no disponible. Consulte con su proveedor de servicio.
 							</template>
-						</h5p>
-
+						</h5p>						
 					</div>
 				</v-card-text>
 

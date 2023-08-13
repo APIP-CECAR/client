@@ -7,15 +7,23 @@
             item-value="id"
             label="Historias"
             clearable
-        ></v-select>
-        <v-data-table :loading="loading"
-        loading-text="Cargando listado..." v-model="selected" :headers="headers" :items="reportStudents" :single-select="singleSelect" item-key="name"
-            show-select class="elevation-1">
+        ></v-select>        
+        <v-data-table 
+            :loading="loading"
+            loading-text="Cargando listado..." 
+            v-model="selected" 
+            :headers="headers" 
+            :items="reportStudents" 
+            :single-select="singleSelect" 
+            item-key="id_usuario"
+            show-select class="elevation-1"
+        >
             <template v-slot:top>
                 <!--v-switch v-model="singleSelect" label="Single select" class="pa-3"></v-switch-->            
             </template>
         </v-data-table>
         <div class="text-center pt-2">
+         <p v-if="planGenerate" class="success-message" :to="'/learning_path'" >Se han generado planes para estudiantes</p>
           <v-btn :disabled="!history || selected.length==0" color="primary" class="mr-2" @click="generatePlan">
             Generar ruta de aprendizaje
           </v-btn>          
@@ -23,13 +31,15 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 var axios = require('axios');
 export default {
-    props: {
+    /*props: {
         ids: []
-    },
+    },*/
     data() {        
         return {        
+            planGenerate:false,
             singleSelect: false,            
             selected: [],
             reportStudents:[],
@@ -39,8 +49,20 @@ export default {
             ],
             loading: false,
             stories: [],
-            history:null
+            history: null,
+            ids: []
         }
+    },
+    computed: {
+        // Mapea la propiedad idsStudents desde el state students
+        ...mapState('students', ['idsStudents']),
+    },    
+    watch: {        
+        idsStudents(newIds, oldIds) {
+            // Llama a los métodos necesarios para actualizar los datos
+            this.ids = newIds;
+            this.getAllStudentByIds();
+        },
     },
     methods: {        
         getAllStudentByIds() {            
@@ -99,11 +121,16 @@ export default {
             });
         },        
         generatePlan() {
+            this.planGenerate = false;
             // Generate plan for students 
             let ids = this.selected.map((obj) => obj.id_usuario)
             let history = this.history;
             axios.post(`${process.env.CECAR_API}/generate_plan`, { ids, history })
-                .then((response) => {})
+                .then((response) => {
+                    // mostrar mensaje del fin de generacion de plan
+                    console.log(`Generate plan ${JSON.stringify(response)}`)
+                    this.planGenerate = true;
+                })
                 .catch(function (error) {
                     console.log(error);
                 })            
@@ -128,9 +155,9 @@ export default {
     },
     mounted() {        
         this.getStories();
-        if(this.ids.length>0)
-            this.getAllStudentByIds();
-        else
+        if (this.ids.length > 0) {
+            this.reportStudents = this.outputArrayFromTest(this.ids);
+        }
             this.getAllStudentsUnPlanning();
     }
 }

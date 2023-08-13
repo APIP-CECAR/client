@@ -41,18 +41,40 @@
                                                     :rules="secondSelectOptionsRules"
                                                 ></v-select>
                                             </v-col>
-                                            <v-col cols="6">                                                
-                                                <v-file-input 
-                                                    class="mb-2" 
-                                                    :rules="fileRules" 
-                                                    accept=".jpg, .jpeg, .png, .avi, .mpeg, .ppt" 
-                                                    placeholder="Selecciona un archivo" 
-                                                    prepend-icon="mdi-multimedia" 
-                                                    label="Diapositiva" 
-                                                    outlined 
+                                            <v-col cols="6">                                                                                               
+                                                <v-file-input
+                                                    ref="fileInput"
+                                                    class="mb-0"
+                                                    :rules="fileRules"
+                                                    accept=".jpg, .jpeg, .png, .mp3, .mp4"
+                                                    placeholder="Selecciona un archivo"
+                                                    prepend-icon="mdi-multimedia"
+                                                    label="Archivo multimedia"
+                                                    outlined
                                                     dense
-                                                    @change="uploadFile"></v-file-input>
+                                                    required
+                                                    @change="uploadFile"
+                                                    v-if="selectedInputType === 'Archivo'"
+                                                ></v-file-input>
+
+                                                <!-- Muestra el componente v-text-field si el tipo de entrada es "URL" -->
+                                                <v-text-field
+                                                    class="mb-0"
+                                                    label="URL"
+                                                    v-model="url"
+                                                    outlined
+                                                    dense
+                                                    required
+                                                    @input="updateURL"
+                                                    v-if="selectedInputType === 'URL'"
+                                                    prepend-icon="mdi-link"
+                                                ></v-text-field>                                                
+                                                <v-radio-group v-model="selectedInputType" row>
+                                                    <v-radio label="Archivo" value="Archivo"></v-radio>
+                                                    <v-radio label="URL" value="URL"></v-radio>
+                                                </v-radio-group>
                                             </v-col>
+                                            <!-- Muestra el componente v-input-text si el tipo de entrada es "url" -->
                                         </v-row>
                                         <v-row>
                                             <v-col>
@@ -85,9 +107,10 @@
                                                             label="Archivo" 
                                                             outlined 
                                                             dense 
-                                                            required                                                            
-                                                            @change="uploadFile">
-                                                        </v-file-input>
+                                                            required   
+                                                            @change="uploadFile"                                                         
+                                                        >
+                                                        </v-file-input>                                                        
                                                     </v-col>
                                                 </v-row>
                                             </v-col>
@@ -263,29 +286,29 @@ export default {
         },
         // new methods
         async uploadFile(file) {
-            if (!file) return;
-
+            if (!file) return;            
             if (this.selectedInputType === 'Archivo') {
                 const formData = new FormData();
                 formData.append('file', file);
-
-                try {
+                console.log('File', file)
+                //try {
                     const response = await this.$axios.post('/upload', formData);
-                    const { fileName, fileSize, fileType, message } = response.data;                   
+                    const { fileName, fileSize, fileType, message } = response.data;                    
                     this.resources.push(this.name_resource)
-                    this.name_resource = '';                    
+                    this.name_resource = '';
+
                     if (fileType == 'application/octet-stream') {
-                        this.editedItem.hiper_objects.push(`/uploads/${fileName}`);
+                        this.editedItem.hiper_objects.push(`/h5p/${fileName}`);
                         this.namesFiles.push(fileName);
                     }
                     else
-                        this.editedItem.background = `/uploads/${fileName}`;
+                        this.editedItem.background = `/multimedia/${fileName}`;
                     
-                } catch (error) {
+               /* } catch (error) {
                     console.error(error);
-                }
+                }*/
             } else if (this.selectedInputType === 'URL') {
-                // console.log('URL:', this.url);
+                this.editedItem.background = this.url;
             }
         },        
         updateURL(url) {
