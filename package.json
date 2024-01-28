@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3"
+  },
+  "engines": {
+    "node": ">= 16.x"    
   }
 }
